@@ -4,13 +4,20 @@ import { GuestsChart } from "@/components/guests-chart"
 import { RSVPTable } from "@/components/rsvp-table"
 import { DietaryRestrictionsChart } from "@/components/dietary-restrictions-chart"
 import { getRSVPs, supabase } from "@/lib/supabase"
-import { HeartHandshake, AlertTriangle } from "lucide-react"
+import { HeartHandshake, AlertTriangle, Music } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export default async function Home() {
   const rsvps = await getRSVPs()
   const isUsingMockData = !supabase
+
+  const songRequests = rsvps
+    .filter((rsvp) => rsvp.song_request && rsvp.song_request.trim() !== "")
+    .map((rsvp) => rsvp.song_request.trim())
+
+  const displayedSongs = songRequests.slice(0, 5)
+  const moreSongsCount = songRequests.length - displayedSongs.length
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -49,19 +56,25 @@ export default async function Home() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <DietaryRestrictionsChart rsvps={rsvps} />
-            <Card className="flex flex-col justify-center items-center p-6">
-              <div className="text-center space-y-2">
+            <Card className="p-6 bg-gradient-to-r from-[#4c4f69] to-[#2e2e48] text-white shadow-lg rounded-xl">
+              <div className="flex items-center gap-3">
+                <Music className="h-8 w-8 text-[#e6b422]" /> {/* Warm golden accent */}
                 <h3 className="text-2xl font-semibold">Song Requests</h3>
-                <p className="text-muted-foreground">
-                  {rsvps.filter((rsvp) => rsvp.song_request && rsvp.song_request.trim() !== "").length} guests have
-                  requested songs
-                </p>
-                <p className="italic text-sm max-w-md mx-auto">
-                  "Music gives a soul to the universe, wings to the mind, flight to the imagination, and life to
-                  everything."
-                </p>
-                <p className="text-xs text-muted-foreground">— Plato</p>
               </div>
+
+              {songRequests.length > 0 ? (
+                <ul className="mt-4 space-y-1 text-lg">
+                  {displayedSongs.map((song, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <span className="text-[#e6b422]">🎶</span> {/* Matches icon color */}
+                      {song}
+                    </li>
+                  ))}
+                  {moreSongsCount > 0 && <li className="text-sm opacity-80">+{moreSongsCount} more...</li>}
+                </ul>
+              ) : (
+                <p className="mt-4 text-muted-foreground">No song requests yet 🎧</p>
+              )}
             </Card>
           </div>
 
@@ -72,3 +85,4 @@ export default async function Home() {
   )
 }
 
+export const revalidate = 600; // 600 seconds = 10 minutes

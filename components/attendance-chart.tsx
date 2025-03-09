@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import type { RSVP } from "@/lib/supabase"
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
+import { ChartContainer } from "@/components/ui/chart"
 
 interface AttendanceChartProps {
   rsvps: RSVP[]
@@ -12,10 +12,9 @@ interface AttendanceChartProps {
 export function AttendanceChart({ rsvps }: AttendanceChartProps) {
   const attending = rsvps.filter((rsvp) => rsvp.attending).length
   const notAttending = rsvps.filter((rsvp) => !rsvp.attending).length
-
   const data = [
-    { name: "Attending", value: attending, color: "var(--chart-1)" },
-    { name: "Not Attending", value: notAttending, color: "var(--chart-2)" },
+    { name: "Attending", value: attending, color: "#2E7D32" }, // Dark Green
+    { name: "Not Attending", value: notAttending, color: "#D84315" }, // Dark Orange-Red
   ]
 
   return (
@@ -25,19 +24,7 @@ export function AttendanceChart({ rsvps }: AttendanceChartProps) {
         <CardDescription>Breakdown of attendance responses</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={{
-            attending: {
-              label: "Attending",
-              color: "hsl(var(--chart-1))",
-            },
-            notAttending: {
-              label: "Not Attending",
-              color: "hsl(var(--chart-2))",
-            },
-          }}
-          className="h-80"
-        >
+        <ChartContainer className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -46,7 +33,6 @@ export function AttendanceChart({ rsvps }: AttendanceChartProps) {
                 cy="50%"
                 labelLine={false}
                 outerRadius={80}
-                fill="#8884d8"
                 dataKey="value"
                 nameKey="name"
                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
@@ -55,7 +41,7 @@ export function AttendanceChart({ rsvps }: AttendanceChartProps) {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <Tooltip />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
@@ -64,4 +50,3 @@ export function AttendanceChart({ rsvps }: AttendanceChartProps) {
     </Card>
   )
 }
-

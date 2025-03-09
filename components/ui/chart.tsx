@@ -4,14 +4,26 @@ type ChartProps = {
   children: React.ReactNode
   className?: string
 }
+type ChartContainerProps = {
+  children: React.ReactNode;
+  config?: {
+    [key: string]: {
+      label: string;
+      color: string;
+    };
+  };
+  className?: string;
+};
+export const ChartContainer = ({ children, config, className }: ChartContainerProps) => {
+  // component implementation
+  // you can use the config prop here if needed
+  return <div className={className}>{children}</div>;
+};
 
 export const Chart = ({ children, className }: ChartProps) => {
   return <div className={className}>{children}</div>
 }
 
-export const ChartContainer = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>
-}
 
 type ChartLegendProps = {
   children: React.ReactNode

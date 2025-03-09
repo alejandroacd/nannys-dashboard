@@ -19,10 +19,9 @@ export function DietaryRestrictionsChart({ rsvps }: DietaryRestrictionsChartProp
   ).length
 
   const withoutRestrictions = attendingRsvps.length - withRestrictions
-
   const data = [
-    { name: "With Restrictions", value: withRestrictions, color: "var(--chart-4)" },
-    { name: "No Restrictions", value: withoutRestrictions, color: "var(--chart-5)" },
+    { name: "With Restrictions", value: withRestrictions, color: "#4B0082" }, // Dark Indigo
+    { name: "No Restrictions", value: withoutRestrictions, color: "#1B5E20" }, // Deep Emerald Green
   ]
 
   return (
@@ -34,11 +33,11 @@ export function DietaryRestrictionsChart({ rsvps }: DietaryRestrictionsChartProp
       <CardContent>
         <ChartContainer
           config={{
-            withRestrictions: {
+            attending: {
               label: "With Restrictions",
               color: "hsl(var(--chart-4))",
             },
-            withoutRestrictions: {
+            notAttending: {
               label: "No Restrictions",
               color: "hsl(var(--chart-5))",
             },
@@ -62,7 +61,9 @@ export function DietaryRestrictionsChart({ rsvps }: DietaryRestrictionsChartProp
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartTooltip>
+                <ChartTooltipContent />
+              </ChartTooltip>
               <Legend />
             </PieChart>
           </ResponsiveContainer>
