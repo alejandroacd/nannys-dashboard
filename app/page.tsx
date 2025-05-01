@@ -16,8 +16,7 @@ export default async function Home() {
     .filter((rsvp) => rsvp.song_request && rsvp.song_request.trim() !== "")
     .map((rsvp) => rsvp.song_request.trim())
 
-  const displayedSongs = songRequests.slice(0, 5)
-  const moreSongsCount = songRequests.length - displayedSongs.length
+  const displayedSongs = songRequests
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -56,7 +55,7 @@ export default async function Home() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <DietaryRestrictionsChart rsvps={rsvps} />
-            <Card className="p-6 bg-gradient-to-r from-[#4c4f69] to-[#2e2e48] text-white shadow-lg rounded-xl">
+            <Card className="p-6 text-slate-700 bg-slate-50 shadow-lg rounded-xl">
               <div className="flex items-center gap-3">
                 <Music className="h-8 w-8 text-[#e6b422]" /> {/* Warm golden accent */}
                 <h3 className="text-2xl font-semibold">Song Requests</h3>
@@ -66,11 +65,10 @@ export default async function Home() {
                 <ul className="mt-4 space-y-1 text-lg">
                   {displayedSongs.map((song, index) => (
                     <li key={index} className="flex items-center gap-2">
-                      <span className="text-[#e6b422]">🎶</span> {/* Matches icon color */}
+                      <span className="text-[#e6b422]">🎶</span>
                       {song}
                     </li>
                   ))}
-                  {moreSongsCount > 0 && <li className="text-sm opacity-80">+{moreSongsCount} more...</li>}
                 </ul>
               ) : (
                 <p className="mt-4 text-muted-foreground">No song requests yet 🎧</p>
